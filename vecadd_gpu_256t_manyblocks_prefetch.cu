@@ -3,7 +3,7 @@
 // Kernel function to add the elements of two arrays
 __global__
 void add(int n, float *x, float *y){
-  // Index of current thread in block
+  // Index of current thread block
   int index = blockIdx.x * blockDim.x + threadIdx.x;
   //number of threads in the block. 
   int stride = blockDim.x * gridDim.x;
@@ -26,12 +26,8 @@ int main(void)
     y[i] = 2.0f;
   }
 
-  int deviceID=0;
-  cudaMemPrefetchAsync((void *)x, N*sizeof(float), deviceID);
-  cudaMemPrefetchAsync((void *)y, N*sizeof(float), deviceID);
-
   int blockSize = 256;
-  int numBlocks = (N + blockSize - 1); // blockSize;
+  int numBlocks = (N + blockSize - 1) / blockSize;
   std::cout << "Number of blocks: "<< numBlocks << std::endl;
   // Run kernel on 1M elements on the GPU
   // 1 thread block, 256 threads per block
