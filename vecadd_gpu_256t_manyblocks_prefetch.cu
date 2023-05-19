@@ -26,6 +26,10 @@ int main(void)
     y[i] = 2.0f;
   }
 
+  int deviceID=0;
+  cudaMemPrefetchAsync((void *)x, N*sizeof(float), deviceID);
+  cudaMemPrefetchAsync((void *)y, N*sizeof(float), deviceID);
+
   int blockSize = 256;
   int numBlocks = (N + blockSize - 1) / blockSize;
   std::cout << "Number of blocks: "<< numBlocks << std::endl;
